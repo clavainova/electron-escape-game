@@ -1,0 +1,17 @@
+- redirect if not logged in
+
+- read from json to dynamically load page (see already-written script elsewhere)
+- CUD
+- html/css for see games ALL + see game (one)
+- html/css for add teams to games (createGame?)
+- test write JSON/delete JSON
+- make classes(?) for each object type in the JSON?? some way to edit it idk smh
+- apply some kind of css to the navbar, +100 points if it's the intended css
+
+other js needed after crud established:
+    - timer
+    - game clearly needs more data in db or is it supposed to be stored locally? seems like a bad idea, ask gerald
+    - anyway right now locally store ongoing games in some format
+    - just add new game info as new json? seems to make more sense than deleting it each time
+
+[optional: fix bg loop]

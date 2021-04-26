@@ -5,29 +5,13 @@
     <meta charset="UTF-8">
     <title>Partie</title>
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
-    <link href="../pages/assets/style/style.css" rel="stylesheet">
+    <link href="../styles/global.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&family=Zen+Dots&display=swap" rel="stylesheet">
-    <style>
-        button {
-            margin: auto;
-            padding: 20px;
-            min-width: 200px;
-            border-radius: 25px;
-            background-color: rgb(34, 34, 34);
-            color: white;
-            border: none;
-            background-color: rgb(0, 0, 0);
-        }
-
-        button:hover {
-            background-color: rgb(0, 0, 255);
-            transition: background 0.5s ease-in-out;
-        }
-    </style>
 </head>
 
 <body id="body">
+    <!-- menu - using Electron menu instead
     <nav>
         <ul>
             <li><a href="">MAKE TEAM</a></li>
@@ -35,7 +19,7 @@
             <li><a href="">MONITOR GAME</a></li>
             <li><a href="">MONITOR TEAM</a></li>
         </ul>
-    </nav>
+    </nav> -->
 
     <div class="teamDivider">
         <h1>Make a team</h1>
@@ -59,6 +43,7 @@
         <ul id='teamMembers'></ul>
         <span><button onclick="clearData();">REENTER</button> <button onclick="">SUBMIT</button></span>
     </div>
+    <script src="../scripts/errorcodes.js"></script>
 
     <script>
         var selectedTeam = []; //who did they choose
@@ -78,7 +63,6 @@
                     try {
                         let exists = document.getElementById("confirm" + elem).onclick;
                     }
-
                     catch (e) {
                         let li = document.createElement("li");
                         li.innerHTML = document.getElementById(elem).value;
@@ -86,7 +70,6 @@
                         document.getElementById("teamMembers").appendChild(li);
                         document.getElementById("validateBox").style.display = "block";
                     }
-
                 });
             }
             //if they have missed some fields
@@ -104,40 +87,6 @@
             }
         }
 
-        function makeErrorMessage(err) {
-            closeError();
-            let div = document.createElement("div");
-            div.className = "errorMessage";
-            div.onclick = function() {closeError(); };
-            div.id = "error";
-            let text;
-            switch (err) {
-                case "012":
-                    text = document.createTextNode("ERROR: ID blank and team must contain at least 2 people");
-                    break;
-                case "01":
-                    text = document.createTextNode("ERROR: ID Blank");
-                    break;
-                case "02":
-                    text = document.createTextNode("ERROR: team must contain at least 2 people");
-                    break;
-                default:
-                    text = document.createTextNode("Unknown error");
-                    break;
-            }
-            div.appendChild(text);
-            document.getElementById("body").appendChild(div);
-            clearData();
-        }
-
-        function closeError() {
-            try{
-                document.getElementById("body").removeChild(document.getElementById("error"));
-            }
-            catch(err){
-                return;
-            }
-        }
 
         //keep track of selected users
         function toggle(userId) {
@@ -148,18 +97,23 @@
                     }
                     return value;
                 });
+                //set style to deselected
                 document.getElementById(userId).style.color = "white"
+                document.getElementById(userId).style.borderLeft = "15px solid white"
             }
             else {
+                //set style to selected
                 selectedTeam.push(userId);
-                document.getElementById(userId).style.color = "yellow";
+                document.getElementById(userId).style.color = " rgb(255, 217, 0)";
+                document.getElementById(userId).style.borderLeft = "15px solid rgb(255, 217, 0)";
             }
         }
 
         function clearData() {
             selectedTeam.forEach(elem => {
                 //reset style
-                document.getElementById(elem).style.backgroundColor = "black";
+                document.getElementById(elem).style.color = "white"
+                document.getElementById(elem).style.borderLeft = "15px solid white"
             });
             //remove the entered text
             document.getElementById("teamID").innerHTML = "";

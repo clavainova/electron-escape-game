@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>login</title>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="../styles/global.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&family=Zen+Dots&display=swap" rel="stylesheet">
+    <style>
+        input,
+        textarea,
+        button {
+            padding: 10px 18px;
+            margin: 10px auto;
+        }
+    </style>
+</head>
+
+<body id="body">
+    <div class="teamDivider">
+        <h1>Log in</h1>
+        <h3>Username: <input type="text" id="username"></input></h3>
+        <h3>Password: <input type="text" id="password"></input></h3><br>
+        <button onclick="verifyInputLocally()">SUBMIT</button>
+    </div>
+
+    <script>
+        //this can get more precise when we have more restrictions
+        function verifyInputLocally() {
+            if (document.getElementById("username").value.trim() == "") {
+                if (document.getElementById("password").value.trim() == "") {
+                    //no username or password
+                    makeErrorMessage("123");
+                }
+                //no username, correct password
+                makeErrorMessage("12");
+            }
+            else if (document.getElementById("password").value.trim() == "") {
+                //correct username, no password
+                makeErrorMessage("13");
+            }
+            else {
+                console.log("all clear");
+                login();
+                //all correct, proceed with send
+            }
+            function login() {
+                if (testLogin(document.getElementById("username").value, document.getElementById("password").value) == true) {
+                    //login correct, redirecting
+                    window.location.href = '/team';
+                }
+                else {
+                    //login failed
+                    makeErrorMessage("00");
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
