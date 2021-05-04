@@ -17,6 +17,4 @@ module.exports = {
     getAuthData: () => {
         return authData;
     }
-
-
 }

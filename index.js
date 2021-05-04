@@ -1,7 +1,29 @@
+//-------------------------------GUIDE-------------------------------
+
+
+/*
+    IMPORTS
+    NAVIGATION
+    GENERATE MENU
+    LOGIN
+    LOCAL JSON HANDLING
+    SERVER JSON HANDLING 
+*/
+
+
+//-------------------------------IMPORTS-------------------------------
+
+
+//electron
 const { app, BrowserWindow, ipcMain, Menu, shell } = require('electron')
 const path = require('path');
 const config = require('./src/config');
 const storage = require('./src/main/storage');
+
+//mongodb
+const MongoClient = require('mongodb').MongoClient;
+const uri = "";
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 
 //-------------------------------NAVIGATION-------------------------------
@@ -105,30 +127,19 @@ const template = [
   }
 ];
 
-const fs = require('fs');
-
-const windows = new Set();
-const openFiles = new Map();
-
 app.on('ready', () => {
   Menu.setApplicationMenu(Menu.buildFromTemplate(template));
-  createWindow();
 });
 
 
-//see references here: https://www.electronjs.org/docs/tutorial/quick-start (ctrl-f 'module')
-
-//-------------------------------JSON HANDLING-------------------------------
+//-------------------------------LOGIN-------------------------------
 
 
-
-const MongoClient = require('mongodb').MongoClient;
-const uri = "";
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+//user connection data
 var user;
 var pass;
 
-//test login details
+//test login details - are they correct?
 async function testLogin(cuser, cpass) {
   user = cuser;
   pass = cpass;
@@ -140,8 +151,6 @@ async function testLogin(cuser, cpass) {
     });
     // specify the DB's name
     const db = client.db('Projet-Fil-Rouge');
-    // execute find query
-    const items = await db.collection('Teams').find({}).toArray();
     // close connection
     client.close();
     return true;
@@ -150,6 +159,55 @@ async function testLogin(cuser, cpass) {
     return e;
   }
 }
+
+//are you currently logged in?
+async function isLoggedIn() {
+  try {  // connect to your cluster
+    let url = 'mongodb+srv://' + user + ':' + pass + '@cluster0.llbg1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
+    const client = await MongoClient.connect(url, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    // specify the DB's name
+    const db = client.db('Projet-Fil-Rouge');
+    // close connection
+    client.close();
+    return true;
+  }
+  catch (e) {
+    console.log("connection error: " + e);
+    return false;
+  }
+}
+
+
+
+//------------------------------- LOCAL JSON HANDLING-------------------------------
+
+var json; //the current json
+//probably want to connect this to jwt
+
+//!!untested
+function add(type, values) {
+  switch (type) {
+    case "team":
+      break;
+    case "game":
+      break;
+    case "player":
+      break;
+  }
+  try {
+    writeJSONToServer();
+  } catch (e) {
+    console.log("server error: " + e);
+  }
+}
+
+
+//------------------------------- SERVER JSON HANDLING-------------------------------
+
+
 
 //gets the JSON, returns 1 JSON string
 async function getJSON(user, pass) {
@@ -162,7 +220,7 @@ async function getJSON(user, pass) {
   // specify the DB's name
   const db = client.db('Projet-Fil-Rouge');
   // execute find query
-  const items = await db.collection('Teams').find({}).toArray();
+  json = await db.collection('Teams').find({}).toArray();
   // close connection
   client.close();
   //return json
@@ -186,7 +244,7 @@ async function deleteOldJSON() {
 }
 
 //!!untested
-async function writeJSONToServer(data) {
+async function writeJSONToServer() {
   // connect to your cluster
   const client = await MongoClient.connect('mongodb+srv://admin:simplonsimp@cluster0.llbg1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', {
     useNewUrlParser: true,
@@ -195,59 +253,7 @@ async function writeJSONToServer(data) {
   // specify the DB's name
   const db = client.db('Projet-Fil-Rouge');
   // execute find query
-  await db.collection('Teams').insertOne({ data }); //this won't work
+  await db.collection('Teams').insertOne({ json }); //this won't work
   // close connection
   client.close();
-}
-
-
-//-------------------------------ERROR CODES-------------------------------
-
-
-
-function makeErrorMessage(err) {
-  closeError();
-  let div = document.createElement("div");
-  div.className = "errorMessage";
-  div.onclick = function () { closeError(); };
-  div.id = "error";
-  let text;
-  switch (err) {
-    case "012":
-      text = document.createTextNode("ERROR: ID blank and team must contain at least 2 people");
-      break;
-    case "01":
-      text = document.createTextNode("ERROR: ID Blank");
-      break;
-    case "02":
-      text = document.createTextNode("ERROR: team must contain at least 2 people");
-      break;
-    case "12":
-      text = document.createTextNode("ERROR: No username entered");
-      break;
-    case "13":
-      text = document.createTextNode("ERROR: No password entered");
-      break;
-    case "123":
-      text = document.createTextNode("ERROR: No username or password entered");
-      break;
-    case "00":
-      text = document.createTextNode("ERROR: Username or password incorrect");
-      break;
-    default:
-      text = document.createTextNode("Unknown error");
-      break;
-  }
-  div.appendChild(text);
-  document.getElementById("body").appendChild(div);
-  clearData();
-}
-
-function closeError() {
-  try {
-    document.getElementById("body").removeChild(document.getElementById("error"));
-  }
-  catch (err) {
-    return;
-  }
 }

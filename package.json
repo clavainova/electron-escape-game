@@ -27,7 +27,8 @@
   "dependencies": {
     "dotenv": "^8.2.0",
     "electron-squirrel-startup": "^1.0.0",
-    "mongodb": "^3.6.6"
+    "mongodb": "^3.6.6",
+    "requirejs": "^2.3.6"
   },
   "config": {
     "forge": {

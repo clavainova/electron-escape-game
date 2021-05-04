@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Partie</title>
+    <title>New Team</title>
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
     <link href="../styles/global.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -22,7 +22,7 @@
     </nav> -->
 
     <div class="teamDivider">
-        <h1>Make a team</h1>
+        <h1>New Team</h1>
         <h2>Enter an ID: <input type="text" id="inputTeamID"></input></h2>
         <h2>Select members:</h2>
         <select multiple="multiple" id="mySelect">
@@ -43,87 +43,6 @@
         <ul id='teamMembers'></ul>
         <span><button onclick="clearData();">REENTER</button> <button onclick="">SUBMIT</button></span>
     </div>
-    <script src="../scripts/errorcodes.js"></script>
-
-    <script>
-        var selectedTeam = []; //who did they choose
-
-        //open validation window
-        function goValidate() {
-            //did they enter an ID?
-            let idEntered = document.getElementById("inputTeamID").value.trim() !== "" ? true : false;
-            console.log(document.getElementById("inputTeamID").value.trim());
-            //at least 2 entries in team?
-            let teamEntered = selectedTeam.length > 1 ? true : false;
-            //if they have all compulsory fields... is there a teamID? have they chosen at least 2 people?
-            if (idEntered && teamEntered) {
-                document.getElementById("teamID").innerHTML = document.getElementById("inputTeamID").value;
-                selectedTeam.forEach(elem => {
-                    //try catch to avoid adding duplicate items
-                    try {
-                        let exists = document.getElementById("confirm" + elem).onclick;
-                    }
-                    catch (e) {
-                        let li = document.createElement("li");
-                        li.innerHTML = document.getElementById(elem).value;
-                        li.id = "confirm" + elem;
-                        document.getElementById("teamMembers").appendChild(li);
-                        document.getElementById("validateBox").style.display = "block";
-                    }
-                });
-            }
-            //if they have missed some fields
-            else {
-                let errCode = "0";
-                if (!idEntered) {
-                    //id blank
-                    errCode = errCode + "1";
-                }
-                if (!teamEntered) {
-                    //team too small
-                    errCode = errCode + "2";
-                }
-                makeErrorMessage(errCode);
-            }
-        }
-
-
-        //keep track of selected users
-        function toggle(userId) {
-            if (selectedTeam.includes(userId)) {
-                selectedTeam = selectedTeam.filter(function (value, index, arr) {
-                    if (value == userId) {
-                        return;
-                    }
-                    return value;
-                });
-                //set style to deselected
-                document.getElementById(userId).style.color = "white"
-                document.getElementById(userId).style.borderLeft = "15px solid white"
-            }
-            else {
-                //set style to selected
-                selectedTeam.push(userId);
-                document.getElementById(userId).style.color = " rgb(255, 217, 0)";
-                document.getElementById(userId).style.borderLeft = "15px solid rgb(255, 217, 0)";
-            }
-        }
-
-        function clearData() {
-            selectedTeam.forEach(elem => {
-                //reset style
-                document.getElementById(elem).style.color = "white"
-                document.getElementById(elem).style.borderLeft = "15px solid white"
-            });
-            //remove the entered text
-            document.getElementById("teamID").innerHTML = "";
-            document.getElementById("teamMembers").innerHTML = "";
-            //empty array
-            selectedTeam = [];
-            //hide it
-            document.getElementById("validateBox").style.display = "none";
-        }
-    </script>
 
 </body>
 
