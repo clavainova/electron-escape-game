@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>New Team</title>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+    <link href="../styles/global.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&family=Zen+Dots&display=swap" rel="stylesheet">
+</head>
+
+<body id="body">
+    <!-- menu - using Electron menu instead
+    <nav>
+        <ul>
+            <li><a href="">MAKE TEAM</a></li>
+            <li><a href="">MAKE GAME</a></li>
+            <li><a href="">MONITOR GAME</a></li>
+            <li><a href="">MONITOR TEAM</a></li>
+        </ul>
+    </nav> -->
+
+    <div class="teamDivider">
+        <h1>New Team</h1>
+        <h2>Enter an ID: <input type="text" id="inputTeamID"></input></h2>
+        <h2>Select members:</h2>
+        <select multiple="multiple" id="mySelect">
+            <option id="userid1" onclick="toggle('userid1')">firstname lastname</option>
+            <option id="userid2" onclick="toggle('userid2')">firstname2 lastname2</option>
+            <option id="userid3" onclick="toggle('userid3')">firstname3 lastname3</option>
+            <option id="userid4" onclick="toggle('userid4')">firstname4 lastname4</option>
+
+        </select><br>
+        <button onclick="goValidate();">OK</button>
+    </div>
+
+    <div class="validateBox" id="validateBox">
+        <h2>Valdate your choices</h2>
+        <b>ID:</b>
+        <p id='teamID'></p>
+        <b>Members:</b>
+        <ul id='teamMembers'></ul>
+        <span><button onclick="clearData();">REENTER</button> <button onclick="">SUBMIT</button></span>
+    </div>
+
+</body>
+
+</html>
